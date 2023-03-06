@@ -24,6 +24,8 @@ class game {
         int get_piecetype(int pos_x, int pos_y);
 
         void debug_info();
+
+        bool try_lazi(const int pos_x, const int pos_y, const int piecetype);
     private:
         int count = 0;
         board_ptr mboard;

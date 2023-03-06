@@ -22,6 +22,7 @@ class board {
 
         int get_piecetype(int pos_x, int pos_y);
         void set_piecetype(const int pos_x, const int pos_y, const int p_type);
+        int get_size() const { return this->size; }
     private:
         int** mmap;
         int size;

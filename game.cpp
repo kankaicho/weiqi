@@ -7,6 +7,8 @@
 #include <set>
 #include <QDebug>
 
+#define TRY_DFS
+
 void game::debug_info()
 {
 //    for(auto i = ps_vec.begin(); i != ps_vec.end(); i ++)
@@ -110,8 +112,28 @@ int game::update_opponent(int _label, const int pos_x, const int pos_y)
     return 0;
 }
 
+bool game::try_lazi(const int pos_x, const int pos_y, const int piecetype) {
+    board nboard;
+    int _size = this->mboard->get_size();
+    nboard.init_board(_size);
+    for(int i = 0; i < _size; i ++) {
+        for(int j = 0; j < _size; j ++) {
+            nboard.set_piecetype(i,j,)
+        }
+    }
+
+}
+
 
 bool game::lazi(const int pos_x, const int pos_y, const int p_type) {
+
+if(this->mboard->get_piecetype(pos_x,pos_y) != emptypiece) {
+    return false;
+}
+
+
+
+#ifndef TRY_DFS
     if(this->mboard->get_piecetype(pos_x,pos_y) != emptypiece) {
         return false;
     }
@@ -162,5 +184,6 @@ bool game::lazi(const int pos_x, const int pos_y, const int p_type) {
     this->mboard->set_piecetype(pos_x,pos_y,p_type);
     this->set_piecePool(pos_x,pos_y,this->count);
     return true;
+ #endif
 
 }

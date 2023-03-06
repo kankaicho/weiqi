@@ -22,6 +22,8 @@ set(PROJECT_SOURCES
         board_factory.h
         game.cpp
         game.h
+        GLog.cpp
+        GLog.h
         main.cpp
         mainwindow.cpp
         mainwindow.h
