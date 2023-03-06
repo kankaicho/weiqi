@@ -20,7 +20,7 @@ void game::debug_info()
 //    }
     qDebug() << "cur cout:" << this->count << ",vec size:" << ps_vec.size();
     for(int i = 0; i < ps_vec.size(); i ++) {
-        qDebug() << "\tqi:" << ps_vec[i].getQi();
+        qDebug() << " \tqi:" << ps_vec[i].getQi();
     }
 }
 
