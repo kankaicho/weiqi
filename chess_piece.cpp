@@ -1,15 +1,21 @@
 #include "chess_piece.h"
 #include <algorithm>
 
-bool pieceString::operator==(const pieceString& ps)
-{
-    return this->pieceString_label == ps.pieceString_label;
-}
+//bool pieceString::operator==(const pieceString& ps)
+//{
+//    return this->pieceString_label == ps.pieceString_label;
+//}
 
-void pieceString::add_piece(const int _mesh)
-{
-    this->piece_string.push_back(_mesh);
-    this->set_pieceString_label(_mesh);
+//void pieceString::add_piece(const int _mesh)
+//{
+//    this->piece_string.push_back(_mesh);
+//    this->set_pieceString_label(_mesh);
+//}
+
+void pieceString::init_piece(chess& c) {
+    int _mesh = c.get_mesh();
+    int _loc = this->encryption(c.get_x(), c.get_y());
+    this->piece_string.push_back(std::make_pair(_mesh, _loc));
 }
 
 void pieceString::setQi(int _qi)
@@ -32,33 +38,32 @@ void pieceString::updateQi()
 
 }
 
-void pieceString::set_pieceString_label(int _label)
+void pieceString::set_label(int _label)
 {
     this->pieceString_label = _label;
 }
 
-int pieceString::get_pieceString_label()
+int pieceString::get_label()
 {
     return this->pieceString_label;
 }
 
-std::vector<int>& pieceString::get_pieceString()
+std::vector<piece_info>& pieceString::get_string()
 {
     return this->piece_string;
 }
 
 int pieceString::find_piece(const int _mesh)
 {
-    auto res = std::find(this->piece_string.begin(),this->piece_string.end(),_mesh);
-    if(res == this->piece_string.end()) {
-        return -1;
+    for(auto i : this->piece_string) {
+        if(_mesh == i.first) return this->get_label();
     }
-    return this->get_pieceString_label();
+    return -1;
 }
 
-void pieceString::combine_pieceString(pieceString& s)
+void pieceString::combine_string(pieceString& s)
 {
-    std::vector<int> ps = s.get_pieceString();
+    std::vector<piece_info> ps = s.get_string();
     for(auto i = ps.begin(); i != ps.end(); i ++) {
         this->piece_string.push_back(*i);
     }

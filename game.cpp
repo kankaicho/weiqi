@@ -78,11 +78,11 @@ std::pair<int,int> game::get_pieceLoc(const int _mesh)
 
 void game::update(const int _label, pieceString& ps, const int pos_x, const int pos_y)
 {
-    ps.combine_pieceString(this->ps_map[_label]);
+    ps.combine_string(this->ps_map[_label]);
     this->ps_map.erase(_label);
 
     for(auto i = ps_vec.begin(); i != ps_vec.end(); i ++) {
-        if(i->get_pieceString_label() == _label) {
+        if(i->get_label() == _label) {
             ps_vec.erase(i);
             break;
         }
@@ -96,14 +96,16 @@ int game::update_opponent(int _label, const int pos_x, const int pos_y)
     if(this->ps_map[_label].getQi() == 0)
     {
         for(int i = 0; i < ps_map[_label].getSize(); i ++) {
-            int piece = ps_map[_label].getPiece(i);
-            auto loc_info = this->get_pieceLoc(piece);
-            this->mboard->set_piecetype(loc_info.first,loc_info.second,emptypiece);
+//            int piece = ps_map[_label].get_piece(i);
+            //            auto loc_info = this->get_pieceLoc(piece);
+            piece_info pi = ps_map[_label].get_piece(i);
+            auto li = std::make_pair(pi.first/1000, pi.second%1000);
+            this->mboard->set_piecetype(li.first,li.second,emptypiece);
         }
         this->ps_map.erase(_label);
 
         for(auto i = ps_vec.begin(); i != ps_vec.end(); i ++) {
-            if(i->get_pieceString_label() == _label) {
+            if(i->get_label() == _label) {
                 ps_vec.erase(i);
                 break;
             }
@@ -118,9 +120,11 @@ bool game::try_lazi(const int pos_x, const int pos_y, const int piecetype) {
     nboard.init_board(_size);
     for(int i = 0; i < _size; i ++) {
         for(int j = 0; j < _size; j ++) {
-            nboard.set_piecetype(i,j,)
+            nboard.set_piecetype(i,j,this->mboard->get_piecetype(pos_x,pos_y));
         }
     }
+
+    int trypiece = piecetype^1;
 
 }
 
