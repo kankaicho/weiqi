@@ -20,10 +20,10 @@ void game::debug_info()
 //        }
 //        std::cout << '\n';
 //    }
-    qDebug() << "cur cout:" << this->count << ",vec size:" << ps_vec.size();
-    for(int i = 0; i < ps_vec.size(); i ++) {
-        qDebug() << " \tqi:" << ps_vec[i].getQi();
-    }
+//    qDebug() << "cur cout:" << this->count << ",vec size:" << ps_vec.size();
+//    for(int i = 0; i < ps_vec.size(); i ++) {
+//        qDebug() << " \tqi:" << ps_vec[i].getQi();
+//    }
 }
 
 void game::init(const int& board_size, const PLAYER_TYPE& player1, const PLAYER_TYPE& player2) {
@@ -37,11 +37,6 @@ void game::init(const int& board_size, const PLAYER_TYPE& player1, const PLAYER_
     this->make_player(std::move(p1),std::move(p2));
 }
 
-int game::get_piecetype(int pos_x, int pos_y)
-{
-    return this->mboard->get_piecetype(pos_x,pos_y);
-}
-
 STATUS game::make_board(board_ptr&& _mboard) {
     this->mboard = std::move(_mboard);
     return 0;
@@ -53,65 +48,9 @@ STATUS game::make_player(player_ptr&& p1, player_ptr&& p2) {
     return 0;
 }
 
-void game::set_piecePool(const int pos_x, const int pos_y, const int _mesh) {
-    int count_key = pos_x*1000+pos_y;
-    int loc_key = _mesh;
-    this->pieceCount_pool[count_key] = _mesh;
-    this->pieceLoc_pool[loc_key] = count_key;
-}
-
-int game::get_pieceMesh(const int pos_x, const int pos_y) {
-    int mesh_key = pos_x*1000+pos_y;
-    if(this->pieceCount_pool.find(mesh_key) == this->pieceCount_pool.end())
-        return NOT_FOUND;
-    return this->pieceCount_pool[mesh_key];
-}
-
-std::pair<int,int> game::get_pieceLoc(const int _mesh)
+int game::get_piecetype(const int pos_x, const int pos_y) const
 {
-    int loc_key = _mesh;
-    int loc_value = this->pieceLoc_pool[loc_key];
-    int pos_x = loc_value/1000;
-    int pos_y = loc_value%1000;
-    return std::make_pair(pos_x,pos_y);
-}
-
-void game::update(const int _label, pieceString& ps, const int pos_x, const int pos_y)
-{
-    ps.combine_string(this->ps_map[_label]);
-    this->ps_map.erase(_label);
-
-    for(auto i = ps_vec.begin(); i != ps_vec.end(); i ++) {
-        if(i->get_label() == _label) {
-            ps_vec.erase(i);
-            break;
-        }
-    }
-    return;
-}
-
-int game::update_opponent(int _label, const int pos_x, const int pos_y)
-{
-    this->ps_map[_label].updateQi(-1);
-    if(this->ps_map[_label].getQi() == 0)
-    {
-        for(int i = 0; i < ps_map[_label].getSize(); i ++) {
-//            int piece = ps_map[_label].get_piece(i);
-            //            auto loc_info = this->get_pieceLoc(piece);
-            piece_info pi = ps_map[_label].get_piece(i);
-            auto li = std::make_pair(pi.first/1000, pi.second%1000);
-            this->mboard->set_piecetype(li.first,li.second,emptypiece);
-        }
-        this->ps_map.erase(_label);
-
-        for(auto i = ps_vec.begin(); i != ps_vec.end(); i ++) {
-            if(i->get_label() == _label) {
-                ps_vec.erase(i);
-                break;
-            }
-        }
-    }
-    return 0;
+    return this->mboard->get_piecetype(pos_x,pos_y);
 }
 
 bool game::try_lazi(const int pos_x, const int pos_y, const int piecetype) {
@@ -131,10 +70,9 @@ bool game::try_lazi(const int pos_x, const int pos_y, const int piecetype) {
 
 bool game::lazi(const int pos_x, const int pos_y, const int p_type) {
 
-if(this->mboard->get_piecetype(pos_x,pos_y) != emptypiece) {
-    return false;
-}
-
+    if(this->mboard->get_piecetype(pos_x,pos_y) != emptypiece) {
+        return false;
+    }
 
 
 #ifndef TRY_DFS
