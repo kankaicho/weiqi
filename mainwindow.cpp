@@ -30,7 +30,7 @@ int board_begloc_x = 40, board_begloc_y = 40;
 int luozi = 5;
 int rl_size = 15;
 int piece_rad = 18;
-int turn = 2;
+int turn = whitepiece;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -77,7 +77,7 @@ void MainWindow::mousePressEvent(QMouseEvent* event) //下棋动作
     }
 #endif
     if(this->mgame.lazi(x_loc,y_loc,turn))
-        turn ^= 1;
+        turn ^= opponent;
 #ifdef ON_BUG
     this->mgame.debug_info();
 #endif

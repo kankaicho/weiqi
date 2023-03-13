@@ -14,8 +14,10 @@
 
 void pieceString::init_piece(chess& c) {
     int _mesh = c.get_mesh();
-    int _loc = this->encryption(c.get_x(), c.get_y());
-    this->piece_string.push_back(std::make_pair(_mesh, _loc));
+    int _loc_code = pieceString::encryption(c.get_x(), c.get_y());
+    this->piece_string.push_back(std::make_pair(_mesh, _loc_code));
+    this->set_label(_mesh);
+    this->freeloc.insert(_loc_code);
 }
 
 void pieceString::setQi(int _qi)
@@ -25,7 +27,7 @@ void pieceString::setQi(int _qi)
 
 int pieceString::getQi()
 {
-    return this->qi;
+    return this->freeloc.size()-this->piece_string.size();
 }
 
 void pieceString::updateQi(int _diff)
@@ -40,12 +42,12 @@ void pieceString::updateQi()
 
 void pieceString::set_label(int _label)
 {
-    this->pieceString_label = _label;
+    this->label = _label;
 }
 
 int pieceString::get_label()
 {
-    return this->pieceString_label;
+    return this->label;
 }
 
 std::vector<piece_info>& pieceString::get_string()
@@ -67,7 +69,7 @@ void pieceString::combine_string(pieceString& s)
     for(auto i = ps.begin(); i != ps.end(); i ++) {
         this->piece_string.push_back(*i);
     }
-
-    int diff_qi = s.getQi()-1;
-    this->updateQi(diff_qi);
+    for(auto iter = s.freeloc.begin(); iter != s.freeloc.end(); iter ++) {
+        this->freeloc.insert(*iter);
+    }
 }

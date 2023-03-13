@@ -4,33 +4,10 @@
 #include <utility>
 #include <vector>
 #include <map>
+#include <set>
 #include <memory>
 
-#define OFF_BUG
-#ifndef OFF_BUG
-typedef std::pair<int,int> piece_loc;
-typedef std::vector<piece_loc> string_piece;
-typedef std::shared_ptr<string_piece> string_piece_ptr;
-
-class piece {
-    public:
-        piece(int _piecetype):piecetype(_piecetype){}
-        ~piece() = default;
-        int count_Qi();
-        void add_stringPiece(int posx, int posy);
-        bool exist_stringPiece(int posx, int posy);
-        void combine_stringPiece(string_piece_ptr&& p1, string_piece_ptr&& p2);
-    private:
-        int piecetype;
-        int string_count = 0;
-        std::map<string_piece_ptr, int> string_piece_pool;
-        std::vector<string_piece_ptr> string_piece_ptr;
-
-        void add_stringCount();
-};
-#endif
-
-
+/* <mesh, loc_code> pice_info */
 typedef std::pair<int,int> piece_info;
 
 
@@ -54,8 +31,6 @@ private:
 
 class pieceString {
 public:
-//    bool operator==(const pieceString& ps);
-//    void add_piece(const int _count);
     void init_piece(chess& c);
     void combine_string(pieceString& s);
     std::vector<piece_info>& get_string();
@@ -69,14 +44,15 @@ public:
     int getSize() const {return this->piece_string.size();}
 //    int getPiece(const int i) {return this->piece_string[i].first;}
     piece_info get_piece(const int i) { return this->piece_string[i]; }
-    int encryption(const int pos_x, const int pos_y) { return pos_x*1000+pos_y; }
-    std::pair<int,int> decryption(const int code) {return {code/1000, code%1000};}
-
+    static int encryption(const int pos_x, const int pos_y) { return pos_x*1000+pos_y; }
+    static std::pair<int,int> decryption(const int code) {return {code/1000, code%1000};}
+    std::set<int> freeloc;
     private:
         int qi = 0;
-        int pieceString_label;
+        int label;
 //        std::vector<int> piece_string;
         std::vector<piece_info> piece_string;
+//        std::set<int> freeloc;
 };
 
 #endif

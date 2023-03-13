@@ -11,6 +11,7 @@
 
 void game::debug_info()
 {
+    this->mboard->debug_info();
 //    for(auto i = ps_vec.begin(); i != ps_vec.end(); i ++)
 //    {
 //        std::cout << "label:" << i->get_pieceString_label() << '\n';
@@ -54,26 +55,22 @@ int game::get_piecetype(const int pos_x, const int pos_y) const
 }
 
 bool game::try_lazi(const int pos_x, const int pos_y, const int piecetype) {
-    board nboard;
-    int _size = this->mboard->get_size();
-    nboard.init_board(_size);
-    for(int i = 0; i < _size; i ++) {
-        for(int j = 0; j < _size; j ++) {
-            nboard.set_piecetype(i,j,this->mboard->get_piecetype(pos_x,pos_y));
-        }
-    }
+//    board nboard;
+//    int _size = this->mboard->get_size();
+//    nboard.init_board(_size);
+//    for(int i = 0; i < _size; i ++) {
+//        for(int j = 0; j < _size; j ++) {
+//            nboard.set_piecetype(i,j,this->mboard->get_piecetype(pos_x,pos_y));
+//        }
+//    }
 
-    int trypiece = piecetype^1;
-
+//    int trypiece = piecetype^1;
+    return true;
 }
 
 
 bool game::lazi(const int pos_x, const int pos_y, const int p_type) {
-
-    if(this->mboard->get_piecetype(pos_x,pos_y) != emptypiece) {
-        return false;
-    }
-
+    return this->mboard->lazi(pos_x,pos_y,p_type);
 
 #ifndef TRY_DFS
     if(this->mboard->get_piecetype(pos_x,pos_y) != emptypiece) {

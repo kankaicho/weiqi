@@ -7,7 +7,7 @@
 typedef int PLAYER_TYPE;
 typedef int STATUS;
 
-enum {illegalpiece = -1, emptypiece = 0, blackpiece = 2, whitepiece = 3};
+enum {illegalpiece = -1, emptypiece = 0, opponent = 1, blackpiece = 2, whitepiece = 3};
 
 enum {x_lef = -1, x_rig = 1};
 enum {y_up = -1, y_down = 1};
