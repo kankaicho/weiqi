@@ -2,6 +2,7 @@
 #define BOARD_H
 
 #include "status.h"
+#include "Glog.h"
 #include "chess_piece.h"
 #include <memory>
 #include <map>
@@ -21,7 +22,7 @@ class board {
         void add_mesh() {this->mesh ++;}
         std::pair<int,int> get_pieceLoc(const int _mesh);
         void update(const int _label, pieceString& ps);
-        int update_opponent(const int _label, const int pos_x, const int pos_y);
+        const vector<int> update_opponent(const int _label, const int pos_x, const int pos_y);
         bool isDead(pieceString ps, const int pos_x, const int pos_y, std::map<int,int> surround_piecestring, int piecetype);
         bool lazi(const int x, const int y, const int type);
         void update_board();
@@ -34,6 +35,7 @@ class board {
         int** mmap;
         int** mesh_map;
         int four_pieces[4];
+        Glog mlog;
 };
 
 typedef std::unique_ptr<board> board_ptr;

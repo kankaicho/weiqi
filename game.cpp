@@ -12,19 +12,6 @@
 void game::debug_info()
 {
     this->mboard->debug_info();
-//    for(auto i = ps_vec.begin(); i != ps_vec.end(); i ++)
-//    {
-//        std::cout << "label:" << i->get_pieceString_label() << '\n';
-//        for(int j = 0; j < i->getSize(); j ++)
-//        {
-//            std::cout << " " << i->getPiece(j);
-//        }
-//        std::cout << '\n';
-//    }
-//    qDebug() << "cur cout:" << this->count << ",vec size:" << ps_vec.size();
-//    for(int i = 0; i < ps_vec.size(); i ++) {
-//        qDebug() << " \tqi:" << ps_vec[i].getQi();
-//    }
 }
 
 void game::init(const int& board_size, const PLAYER_TYPE& player1, const PLAYER_TYPE& player2) {
@@ -52,20 +39,6 @@ STATUS game::make_player(player_ptr&& p1, player_ptr&& p2) {
 int game::get_piecetype(const int pos_x, const int pos_y) const
 {
     return this->mboard->get_piecetype(pos_x,pos_y);
-}
-
-bool game::try_lazi(const int pos_x, const int pos_y, const int piecetype) {
-//    board nboard;
-//    int _size = this->mboard->get_size();
-//    nboard.init_board(_size);
-//    for(int i = 0; i < _size; i ++) {
-//        for(int j = 0; j < _size; j ++) {
-//            nboard.set_piecetype(i,j,this->mboard->get_piecetype(pos_x,pos_y));
-//        }
-//    }
-
-//    int trypiece = piecetype^1;
-    return true;
 }
 
 

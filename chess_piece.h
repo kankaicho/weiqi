@@ -42,7 +42,6 @@ public:
     void setQi(int _qi);
     int find_piece(const int _mesh);
     int getSize() const {return this->piece_string.size();}
-//    int getPiece(const int i) {return this->piece_string[i].first;}
     piece_info get_piece(const int i) { return this->piece_string[i]; }
     static int encryption(const int pos_x, const int pos_y) { return pos_x*1000+pos_y; }
     static std::pair<int,int> decryption(const int code) {return {code/1000, code%1000};}
@@ -50,9 +49,7 @@ public:
     private:
         int qi = 0;
         int label;
-//        std::vector<int> piece_string;
         std::vector<piece_info> piece_string;
-//        std::set<int> freeloc;
 };
 
 #endif

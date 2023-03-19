@@ -3,7 +3,7 @@
 #include "game.h"
 
 #include "board_factory.h"
-#include "player_factory.h""
+#include "player_factory.h"
 
 #include <iostream>
 #include <QMessageBox>

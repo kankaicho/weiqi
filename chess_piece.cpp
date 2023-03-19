@@ -1,17 +1,6 @@
 #include "chess_piece.h"
 #include <algorithm>
 
-//bool pieceString::operator==(const pieceString& ps)
-//{
-//    return this->pieceString_label == ps.pieceString_label;
-//}
-
-//void pieceString::add_piece(const int _mesh)
-//{
-//    this->piece_string.push_back(_mesh);
-//    this->set_pieceString_label(_mesh);
-//}
-
 void pieceString::init_piece(chess& c) {
     int _mesh = c.get_mesh();
     int _loc_code = pieceString::encryption(c.get_x(), c.get_y());
@@ -33,11 +22,6 @@ int pieceString::getQi()
 void pieceString::updateQi(int _diff)
 {
     this->qi += _diff;
-}
-
-void pieceString::updateQi()
-{
-
 }
 
 void pieceString::set_label(int _label)

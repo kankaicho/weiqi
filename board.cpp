@@ -17,10 +17,12 @@ STATUS board::init_board(const int _size)
 
 void board::debug_info()
 {
-    qDebug() << "cur mesh:" << this->mesh << ",ps_map size:" << ps_map.size();
-    for(auto i = ps_map.begin(); i != ps_map.end(); i ++) {
-        qDebug() << " \tqi:" << (*i).second.getQi() << "; chess num:" << (*i).second.getSize();
-    }
+//    qDebug() << "cur mesh:" << this->mesh << ",ps_map size:" << ps_map.size();
+//    for(auto i = ps_map.begin(); i != ps_map.end(); i ++) {
+//        qDebug() << " \tqi:" << (*i).second.getQi() << "; chess num:" << (*i).second.getSize();
+//    }
+    string buginfo = this->mlog.cmd2str();
+    qDebug() << buginfo.c_str();
 }
 
 void board::update_check() {
@@ -46,6 +48,26 @@ int board::get_piecetype(const int pos_x, const int pos_y)
 void board::set_piecetype(const int pos_x, const int pos_y, const int p_type)
 {
     this->mmap[pos_y][pos_x] = p_type;
+}
+
+bool board::isDead(pieceString ps, const int pos_x, const int pos_y, std::map<int,int> surround_piecestring, int piecetype) {
+    std::map<int, pieceString> _ps_map = this->ps_map;
+
+    for(auto iter = surround_piecestring.begin(); iter != surround_piecestring.end();iter ++) {
+        int i = iter->second;
+        int _label = iter->first;
+        if(four_pieces[i] == piecetype) {
+            ps.combine_string(_ps_map[_label]);
+            _ps_map.erase(_label);
+        }
+        else if((four_pieces[i] ^ piecetype) == opponent) {
+            _ps_map[_label].freeloc.erase(pieceString::encryption(pos_x,pos_y));
+            if(_ps_map[_label].getQi() == 0) return false;
+        }
+    }
+
+    if(ps.getQi() == 0) return true;
+    return false;
 }
 
 bool board::lazi(const int pos_x, const int pos_y, const int piecetype)
@@ -80,40 +102,29 @@ bool board::lazi(const int pos_x, const int pos_y, const int piecetype)
 
     if(isDead(ps,pos_x,pos_y,surround_piecestring,piecetype)) return false;
 
+    command mcmd;
+    mcmd.type = piecetype;
+    mcmd.lz_piece = pieceString::encryption(pos_x,pos_y);
+
     for(auto iter = surround_piecestring.begin(); iter != surround_piecestring.end();iter ++) {
         int i = iter->second;
         if(four_pieces[i] == piecetype) {
             this->update(iter->first,ps);
         }
-        else if((four_pieces[i] ^ piecetype) == opponent) this->update_opponent(iter->first, pos_x,pos_y);
+        else if((four_pieces[i] ^ piecetype) == opponent) {
+            auto ret = this->update_opponent(iter->first, pos_x,pos_y);
+            mcmd.rm_piece.insert(mcmd.rm_piece.end(),ret.begin(),ret.end());
+        }
     }
 
     this->ps_map[ps.get_label()] = ps;
     this->set_piecetype(pos_x,pos_y,piecetype);
     this->set_meshmap(pos_x,pos_y,this->mesh);
 
+    this->mlog.addcmd(mcmd);
     this->add_mesh();
+
     return true;
-}
-
-bool board::isDead(pieceString ps, const int pos_x, const int pos_y, std::map<int,int> surround_piecestring, int piecetype) {
-    std::map<int, pieceString> _ps_map = this->ps_map;
-
-    for(auto iter = surround_piecestring.begin(); iter != surround_piecestring.end();iter ++) {
-        int i = iter->second;
-        int _label = iter->first;
-        if(four_pieces[i] == piecetype) {
-            ps.combine_string(_ps_map[_label]);
-            _ps_map.erase(_label);
-        }
-        else if((four_pieces[i] ^ piecetype) == opponent) {
-            _ps_map[_label].freeloc.erase(pieceString::encryption(pos_x,pos_y));
-            if(_ps_map[_label].getQi() == 0) return false;
-        }
-    }
-
-    if(ps.getQi() == 0) return true;
-    return false;
 }
 
 
@@ -124,17 +135,19 @@ void board::update(const int _label, pieceString& ps)
     return;
 }
 
-int board::update_opponent(int _label, const int pos_x, const int pos_y)
+const vector<int> board::update_opponent(int _label, const int pos_x, const int pos_y)
 {
+    vector<int> ret;
     ps_map[_label].freeloc.erase(pieceString::encryption(pos_x,pos_y));
     if(ps_map[_label].getQi() == 0) {
         for(int i = 0; i < ps_map[_label].getSize(); i ++) {
             piece_info pi = ps_map[_label].get_piece(i);
             auto li = pieceString::decryption(pi.second);
             this->set_piecetype(li.first,li.second,emptypiece);
+            ret.push_back(pieceString::encryption(pos_x,pos_y));
         }
         this->ps_map.erase(_label);
         this->update_check();
     }
-    return 0;
+    return ret;
 }
