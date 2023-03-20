@@ -2,18 +2,10 @@
 #include <QApplication>
 #include <QLocale>
 #include <QTranslator>
-
-#include "play_menu.h"
+#include "startmenu.h"
 
 int main(int argc, char *argv[])
 {
-
-    int board_size = 19;
-
-    PLAYER_TYPE p1 = PLAYER_BOT;
-    PLAYER_TYPE p2 = PLAYER_USER;
-
-//    get_start(board_size,p1,p2);
 
     QApplication a(argc, argv);
 
@@ -26,8 +18,7 @@ int main(int argc, char *argv[])
             break;
         }
     }
-    MainWindow w;
-    w.make_start(board_size,p1,p2);
-    w.show();
+    startmenu sm;
+    sm.show();
     return a.exec();
 }

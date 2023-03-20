@@ -33,6 +33,9 @@ set(PROJECT_SOURCES
         play_menu.cpp
         play_menu.h
         status.h
+        startmenu.h
+        startmenu.cpp
+        startmenu.ui
         ${TS_FILES}
 )
 
